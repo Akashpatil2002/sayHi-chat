@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { io } from "socket.io-client";
 
 // ❌ WRONG: /api removed for socket
-const BASE_URL = "https://sayhi-chat-5doa.onrender.com"; 
+const BASE_URL = "https://sayhi-chat-5doa.onrender.com";
 
 export const useAuthStore = create((set, get) => ({
     authUser: null,
@@ -17,8 +17,32 @@ export const useAuthStore = create((set, get) => ({
 
     setAuthUser: (user) => set({ authUser: user }),
 
+    // checkAuth: async () => {
+    //     try {
+    //         const res = await axiosInstance.get("/auth/check");
+
+    //         console.log("CHECK AUTH RESPONSE:", res.data);
+
+    //         if (res.data?._id) {
+    //             set({ authUser: res.data });
+
+    //             // 🔥 CONNECT SOCKET AFTER AUTH
+    //             get().connectSocket();
+    //         } else {
+    //             set({ authUser: null });
+    //         }
+
+    //     } catch (error) {
+    //         set({ authUser: null });
+    //     } finally {
+    //         set({ isCheckingAuth: false });
+    //     }
+    // },
+
     checkAuth: async () => {
         try {
+            set({ isCheckingAuth: true }); // ✅ IMPORTANT FIX
+
             const res = await axiosInstance.get("/auth/check");
 
             console.log("CHECK AUTH RESPONSE:", res.data);
@@ -26,7 +50,7 @@ export const useAuthStore = create((set, get) => ({
             if (res.data?._id) {
                 set({ authUser: res.data });
 
-                // 🔥 CONNECT SOCKET AFTER AUTH
+                // 🔥 socket only after user is confirmed
                 get().connectSocket();
             } else {
                 set({ authUser: null });
@@ -34,10 +58,16 @@ export const useAuthStore = create((set, get) => ({
 
         } catch (error) {
             set({ authUser: null });
+
+            if (error.response?.status !== 401) {
+                console.log("Error in checkAuth:", error);
+            }
+
         } finally {
-            set({ isCheckingAuth: false });
+            set({ isCheckingAuth: false }); // ✅ IMPORTANT
         }
     },
+
 
     signup: async (data) => {
         set({ isSigningUp: true });
