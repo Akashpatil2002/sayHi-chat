@@ -30,7 +30,7 @@ app.use(cookieParser());
 
 // ✅ FIXED CORS
 app.use(cors({
-    origin: ["http://localhost:5173", "https://sayhi-chat-app.vercel.app"],
+    origin: ["http://localhost:5173", "https://say-hi-chat.vercel.app"],
     credentials: true
 }))
 
