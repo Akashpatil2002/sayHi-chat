@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { io } from "socket.io-client";
 
 // ❌ WRONG: /api removed for socket
-const BASE_URL = "https://sayhi-chat-app.onrender.com";
+const BASE_URL = "https://sayhi-chat-5doa.onrender.com"; 
 
 export const useAuthStore = create((set, get) => ({
     authUser: null,
