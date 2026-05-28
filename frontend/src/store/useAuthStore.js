@@ -15,6 +15,8 @@ export const useAuthStore = create((set, get) => ({
     onlineUsers: [],
     socket: null,
 
+    authReady: false,
+
     setAuthUser: (user) => set({ authUser: user }),
 
     // checkAuth: async () => {
@@ -41,16 +43,12 @@ export const useAuthStore = create((set, get) => ({
 
     checkAuth: async () => {
         try {
-            set({ isCheckingAuth: true }); // ✅ IMPORTANT FIX
+            set({ isCheckingAuth: true, authReady: false });
 
             const res = await axiosInstance.get("/auth/check");
 
-            console.log("CHECK AUTH RESPONSE:", res.data);
-
             if (res.data?._id) {
                 set({ authUser: res.data });
-
-                // 🔥 socket only after user is confirmed
                 get().connectSocket();
             } else {
                 set({ authUser: null });
@@ -58,13 +56,8 @@ export const useAuthStore = create((set, get) => ({
 
         } catch (error) {
             set({ authUser: null });
-
-            if (error.response?.status !== 401) {
-                console.log("Error in checkAuth:", error);
-            }
-
         } finally {
-            set({ isCheckingAuth: false }); // ✅ IMPORTANT
+            set({ isCheckingAuth: false, authReady: true }); // ✅ IMPORTANT
         }
     },
 

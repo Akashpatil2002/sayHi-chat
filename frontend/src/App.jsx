@@ -17,7 +17,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 
 const App = () => {
 
-  const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore()
+  const { authUser, checkAuth, isCheckingAuth, onlineUsers, authReady } = useAuthStore()
   const { theme, initializeTheme } = useThemeStore()
 
   console.log({ onlineUsers });
@@ -37,9 +37,10 @@ const App = () => {
   //     <Loader className="size-10 animate-spin" />
   //   </div>
   // )
-  if (isCheckingAuth) {
+
+  if (!authReady || isCheckingAuth) {
     return (
-      <div className="flex items-center justify-center h-screen text-white">
+      <div className="flex items-center justify-center h-screen">
         <Loader className="size-10 animate-spin" />
       </div>
     );
