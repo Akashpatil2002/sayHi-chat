@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useChatStore } from "../store/useChatStore";
 import SidebarSkeleton from "./skeletons/SidebarSkeleton";
-import { Users, ChevronLeft, ChevronRight } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
+import { Users, ChevronLeft, ChevronRight, RefreshCw } from "lucide-react";
 
 const Sidebar = () => {
     const { getUsers, users, selectedUser, setSelectedUser, isUsersLoading } = useChatStore();
@@ -66,13 +66,34 @@ const Sidebar = () => {
             >
                 {/* Header */}
                 <div className="border-b border-white/10 p-6 backdrop-blur-md bg-base-100/50">
-                    <div className="flex items-center gap-3">
+                    {/* <div className="flex items-center gap-3">
                         <div className="w-9 h-9 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center">
                             <Users className="size-5 text-white" />
                         </div>
                         <span className="font-semibold text-xl tracking-tight text-white">
                             Contacts
                         </span>
+                    </div> */}
+
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            <div className="w-9 h-9 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center">
+                                <Users className="size-5 text-white" />
+                            </div>
+
+                            <span className="font-semibold text-xl tracking-tight text-white">
+                                Contacts
+                            </span>
+                        </div>
+
+                        {/* Mobile & Tablet Refresh Button */}
+                        <button
+                            type="button"
+                            onClick={() => getUsers()}
+                            className="lg:hidden mr-3 p-2 rounded-xl bg-white/10 hover:bg-white/20 transition-all duration-200"
+                        >
+                            <RefreshCw size={18} className="text-white" />
+                        </button>
                     </div>
 
                     <div className="mt-5 flex items-center justify-between">

@@ -14,41 +14,18 @@ export const useAuthStore = create((set, get) => ({
     isCheckingAuth: true,
     onlineUsers: [],
     socket: null,
-
-    authReady: false,
-
     setAuthUser: (user) => set({ authUser: user }),
-
-    // checkAuth: async () => {
-    //     try {
-    //         const res = await axiosInstance.get("/auth/check");
-
-    //         console.log("CHECK AUTH RESPONSE:", res.data);
-
-    //         if (res.data?._id) {
-    //             set({ authUser: res.data });
-
-    //             // 🔥 CONNECT SOCKET AFTER AUTH
-    //             get().connectSocket();
-    //         } else {
-    //             set({ authUser: null });
-    //         }
-
-    //     } catch (error) {
-    //         set({ authUser: null });
-    //     } finally {
-    //         set({ isCheckingAuth: false });
-    //     }
-    // },
 
     checkAuth: async () => {
         try {
-            set({ isCheckingAuth: true, authReady: false });
-
             const res = await axiosInstance.get("/auth/check");
+
+            console.log("CHECK AUTH RESPONSE:", res.data);
 
             if (res.data?._id) {
                 set({ authUser: res.data });
+
+                // 🔥 CONNECT SOCKET AFTER AUTH
                 get().connectSocket();
             } else {
                 set({ authUser: null });
@@ -57,10 +34,9 @@ export const useAuthStore = create((set, get) => ({
         } catch (error) {
             set({ authUser: null });
         } finally {
-            set({ isCheckingAuth: false, authReady: true }); // ✅ IMPORTANT
+            set({ isCheckingAuth: false });
         }
     },
-
 
     signup: async (data) => {
         set({ isSigningUp: true });
