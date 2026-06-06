@@ -13,9 +13,6 @@ dotenv.config();
 
 const PORT = process.env.PORT;
 
-// 🔥 ADD THIS (Render ke liye cookie fix)
-app.set("trust proxy", 1);
-
 // ✅ Added body size limit (Fix for PayloadTooLargeError)
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
@@ -33,6 +30,9 @@ app.use(cors({
     origin: ["http://localhost:5173", "https://say-hi-chat.vercel.app"],
     credentials: true
 }))
+
+// 🔥 ADD THIS (Render ke liye cookie fix)
+app.set("trust proxy", 1);
 
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
